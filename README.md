@@ -4,11 +4,6 @@ Welcome to the Advent of Code[^aoc] Kotlin project created by [cisimon7][github]
 
 In this repository, cisimon7 is about to provide solutions for the puzzles using [Kotlin][kotlin] language.
 
-If you stuck with Kotlin-specific questions or anything related to this template, check out the following resources:
-
-- [Kotlin docs][docs]
-- [Kotlin Slack][slack]
-- Template [issue tracker][issues]
 
 
 [^aoc]:
