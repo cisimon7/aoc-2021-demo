@@ -1,3 +1,7 @@
+package day1
+
+import readInput
+
 fun main() {
     fun part1(input: List<String>): Long {
         return input.map { it.toInt() }
@@ -15,10 +19,7 @@ fun main() {
             .sumOf { pair -> if (pair[1] > pair[0]) 1L else 0L }
     }
 
-    // test if implementation meets criteria from the description, like:
-    // val testInput = readInput("Day01P1")
-
-    val input = readInput("Day01")
+    val input = readInput("day1/day1.txt")
     println(part1(input))
     println(part2(input))
 }
