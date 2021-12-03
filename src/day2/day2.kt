@@ -2,7 +2,6 @@ package day2
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import readInput
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
