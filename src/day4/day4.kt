@@ -20,13 +20,14 @@ fun main(args: Array<String>) {
         loop@ for (num in order) {
             for ((i, board) in (boards.indices.zip(boards))) {
                 val markBoard = board.mark(num)
+                boards[i] = markBoard
+
                 if (markBoard.check()) {
                     val sumUnMarked = markBoard.sumUnmarked()
                     winningBoard = markBoard
                     product = num.toInt() * sumUnMarked
                     break@loop
                 }
-                boards[i] = markBoard
             }
         }
 
@@ -34,7 +35,36 @@ fun main(args: Array<String>) {
         return product
     }
 
-    fun part2(input: List<String>) {
+    fun part2(input: List<String>): Int? {
+
+        val (order, boards) = parseInput(input)
+        var product: Int? = null
+        val winningBoards = mutableListOf<Board>()
+
+        loop@ for (num in order) {
+            val rmIdx = mutableListOf<Int>()
+            for ((i, board) in (boards.indices.zip(boards))) {
+                val markBoard = board.mark(num)
+                boards[i] = markBoard
+
+                if (markBoard.check()) {
+                    winningBoards.add(markBoard)
+                    rmIdx.add(i)
+                }
+            }
+            rmIdx.map { id -> boards[id] }.forEach { board -> boards.remove(board) }
+
+            if (boards.isEmpty()) {
+
+                val lastBoard = winningBoards.last()
+                println(lastBoard)
+                val sumUnMarked = lastBoard.sumUnmarked()
+                product = num.toInt() * sumUnMarked
+                break@loop
+            }
+        }
+
+        return product
 
     }
 
@@ -46,8 +76,8 @@ fun main(args: Array<String>) {
     val (result1, time1) = measureTimedValue { part1(input) }
     println(mapOf("Time (ms)" to time1.toString()) + mapOf("Product" to result1))
 
-//    val (result2, time2) = measureTimedValue { part2(input) }
-//    println(mapOf("Time (ms)" to time2.toString()) + result2)
+    val (result2, time2) = measureTimedValue { part2(input) }
+    println(mapOf("Time (ms)" to time2.toString()) + mapOf("Product" to result2))
 }
 
 private fun Board.sumUnmarked(): Int {
@@ -75,12 +105,8 @@ private fun parseInput(input: List<String>): Pair<List<String>, Boards> {
     return Pair(order, boards)
 }
 
-private fun Board.print() {
-    println(this)
-}
-
 private fun Board.mark(num: String): Board {
-    return this.map { row -> row.map { value -> if (value == num) "⋇$value" else value } }
+    return this.map { row -> row.map { value -> if (value == num) "$MARK$value" else value } }
 }
 
 private fun Board.check(): Boolean {
@@ -91,6 +117,6 @@ private fun Board.check(): Boolean {
     val allSequence = board + boardTransposed
 
     return allSequence.any { row ->
-        row.all { value -> value.startsWith("⋇") }
+        row.all { value -> value.startsWith(MARK) }
     }
 }
