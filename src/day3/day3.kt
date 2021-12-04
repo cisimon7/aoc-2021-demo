@@ -4,6 +4,9 @@ import readInput
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
+typealias CharSeq = List<Char>
+typealias MapGroup = Map.Entry<Boolean, Int>
+
 @OptIn(ExperimentalTime::class)
 fun main() {
 
@@ -83,10 +86,13 @@ fun main() {
     println(mapOf("Time (ms)" to time2.toString()) + result2)
 }
 
-fun buildSeq(list: List<List<Char>>, func: (Map.Entry<Boolean, Int>, Map.Entry<Boolean, Int>)->Map.Entry<Boolean, Int>): Sequence<Triple<Int, Boolean, List<List<Char>>>> {
+fun buildSeq(
+    list: List<CharSeq>,
+    func: (MapGroup, MapGroup) -> MapGroup
+): Sequence<Triple<Int, Boolean, List<CharSeq>>> {
     val size = list.first().size
 
-    return generateSequence(Triple(0, false, list)) { (step, end, prevList) ->
+    return generateSequence(Triple(0, false, list)) { (step, _, prevList) ->
         val bits = List(size) { idx ->
             prevList.map { it[idx] }
         }[step % size]
@@ -95,11 +101,11 @@ fun buildSeq(list: List<List<Char>>, func: (Map.Entry<Boolean, Int>, Map.Entry<B
             .groupingBy { bit -> bit == '1' }
             .eachCount()
             .entries
-            .reduce { acc, entry -> func(acc,entry) }
+            .reduce { acc, entry -> func(acc, entry) }
             .let { if (it.key) '1' else '0' }
 
         val next = prevList.zip(bits).filter { (_, snd) -> snd == mode }.map { it.first }
 
-        Triple(step+1, next.size==1 && prevList==next, next)
+        Triple(step + 1, next.size == 1 && prevList == next, next)
     }
 }
