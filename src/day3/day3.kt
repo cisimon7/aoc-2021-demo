@@ -92,7 +92,7 @@ fun buildSeq(
 ): Sequence<Triple<Int, Boolean, List<CharSeq>>> {
     val size = list.first().size
 
-    return generateSequence(Triple(0, false, list)) { (step, end, prevList) ->
+    return generateSequence(Triple(0, false, list)) { (step, _, prevList) ->
         val bits = List(size) { idx ->
             prevList.map { it[idx] }
         }[step % size]
