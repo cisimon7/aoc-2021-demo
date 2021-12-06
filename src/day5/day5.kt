@@ -17,23 +17,23 @@ fun main() {
     fun part1(input: List<String>): Int {
 
         val vents = parse(input)
-        val diagram = MutableList(1_000) { MutableList(1_000) { 0 } }
+        val board = MutableList(1_000) { MutableList(1_000) { 0 } }
         vents.filter { (pt1, pt2) -> pt1.x == pt2.x || pt1.y == pt2.y }
             .forEach { (pt1, pt2) ->
                 val xRange = if (pt1.x > pt2.x) pt1.x downTo pt2.x else pt2.x downTo pt1.x
                 val yRange = if (pt1.y > pt2.y) pt1.y downTo pt2.y else pt2.y downTo pt1.y
                 val link = xRange.map { x -> yRange.map { y -> Point(x, y) } }.flatten()
-                link.forEach { (x, y) -> diagram[y][x]+=1 }
+                link.forEach { (x, y) -> board[y][x]+=1 }
             }
 
 //         diagram.forEach { println(it) }
-        return diagram.flatten().count { num -> num > 1 }
+        return board.flatten().count { num -> num > 1 }
     }
 
     fun part2(input: List<String>): Int {
 
         val vents = parse(input)
-        val diagram = MutableList(1_000) { MutableList(1_000) { 0 } }
+        val board = MutableList(1_000) { MutableList(1_000) { 0 } }
         vents.forEach { (pt1, pt2) ->
             var link = mutableListOf<Point>()
             if (pt1.x == pt2.x || pt1.y == pt2.y) {
@@ -45,11 +45,11 @@ fun main() {
                 val yRange = if (pt1.y > pt2.y) pt1.y downTo pt2.y else pt1.y until pt2.y+1
                 xRange.zip(yRange).forEach { (x, y) -> link.add(Point(x,y)) }
             }
-            link.forEach { (x, y) -> diagram[y][x]+=1 }
+            link.forEach { (x, y) -> board[y][x]+=1 }
         }
 
         // diagram.forEach { println(it) }
-        return diagram.flatten().count { num -> num > 1 }
+        return board.flatten().count { num -> num > 1 }
     }
 
     val testInput = readInput("day5/day5_test.txt")
