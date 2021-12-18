@@ -2,12 +2,11 @@ package day6
 
 import readInput
 import runWithTime
-import java.math.BigInteger
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    fun part1(input: List<Int>): Int {
 
-        var fish: List<Int> = parse(input)
+        var fish: List<Int> = input
 
         repeat(80) {
             val birthFishCount = fish.count { days -> days == 0 }
@@ -18,13 +17,12 @@ fun main() {
         return fish.count()
     }
 
-    fun part2(input: List<String>): BigInteger {
+    fun part2(input: List<Int>): ULong {
 
-        val days2Birth = parse(input)
         val countDays = 256
 
         /* Map<RemainingDays, FishCount> */
-        var daysLeft2Count = (0..8).associateWith { day -> days2Birth.count { it == day }.toBigInteger() }
+        var daysLeft2Count = (0..8).associateWith { day -> input.count { it == day }.toULong() }
         val fishCountFromDaysLeft = { daysLeft: Int -> daysLeft2Count.getValue(daysLeft) }
 
         repeat(countDays) {
@@ -37,13 +35,13 @@ fun main() {
             }
         }
 
-        return daysLeft2Count.values.reduce { acc, count -> acc + count }
+        return daysLeft2Count.values.sum()
     }
 
-    val testInput = readInput("day6/day6_test.txt")
+    val testInput = parse(readInput("day6/day6_test.txt"))
     println(part1(testInput))
 
-    val input = readInput("day6/day6.txt")
+    val input = parse(readInput("day6/day6.txt"))
     runWithTime { part1(input) }
     runWithTime { part2(input) }
 }
